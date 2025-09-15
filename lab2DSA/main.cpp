@@ -1,41 +1,50 @@
 #include <iostream>
-#include <vector>
+#include <string>
 using namespace std;
 
 
-vector<int> findIndices(const vector<int>& arr, int key) {
-    vector<int> indices;
+int findSubstring(const string& text, const string& pattern) {
+    
+    if (pattern.empty()) return 0;
 
-    for (int i = 0; i < arr.size(); i++) {
-        if (arr[i] == key) {
-            indices.push_back(i);  
+    int n = text.size();
+    int m = pattern.size();
+
+    if (m > n) return -1; 
+
+    for (int i = 0; i <= n - m; i++) {
+        const char* t = text.c_str() + i;     
+        const char* p = pattern.c_str();      
+        bool match = true;
+
+        
+        for (int j = 0; j < m; j++) {
+            if (*(t + j) != *(p + j)) {
+                match = false;
+                break;
+            }
         }
+
+        if (match) return i;  
     }
 
-    return indices;
+    return -1; 
 }
 
-
 int main() {
- 
-    vector<int> arr1 = {1, 2, 3, 2, 4, 2, 5};
-    vector<int> result1 = findIndices(arr1, 2);
-    cout << "Indices of 2: ";
-    for (int idx : result1) cout << idx << " ";
-    cout << endl;
+  
+    cout << "Test 1 (pattern at beginning): "
+         << findSubstring("hello world", "hello") << endl;
 
- 
-    vector<int> arr2 = {10, 20, 30, 40};
-    vector<int> result2 = findIndices(arr2, 5);
-    cout << "Indices of 5: ";
-    for (int idx : result2) cout << idx << " ";
-    cout << "(empty if not found)" << endl;
+    cout << "Test 2 (pattern at end): "
+         << findSubstring("openai rocks", "rocks") << endl;
 
-    vector<int> arr3;
-    vector<int> result3 = findIndices(arr3, 1);
-    cout << "Indices of 1 in empty array: ";
-    for (int idx : result3) cout << idx << " ";
-    cout << "(empty if not found)" << endl;
+    cout << "Test 3 (pattern not present): "
+         << findSubstring("abcdef", "gh") << endl;
+
+
+    cout << "Test 4 (empty pattern): "
+         << findSubstring("abcdef", "") << endl;
 
     return 0;
 }
